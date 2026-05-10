@@ -8,7 +8,7 @@ public class TestRun
     public int ScenarioId { get; set; }
     
     public DateTime ExecutionDate  { get; set; }
-    public int VirtualUsers { get; set; }
+    public int VirtualUsersCount { get; set; }
     public double AverageResponseTime { get; set; }
     public bool IsSuccess { get; set; }
     

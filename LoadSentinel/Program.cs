@@ -1,13 +1,29 @@
+using LoadSentinel.Data;
+using LoadSentinel.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// 1. CONFIGURATION DES SERVICES (Le conteneur IoC)
+
+// AJOUT CRUCIAL : Indique à l'app d'aller chercher tes classes [ApiController] dans le dossier Controllers
+builder.Services.AddControllers(); 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configuration de la base de données
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<LoadSentinelDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Injection de ton service (Scoped est parfait pour les services qui utilisent un DbContext)
+builder.Services.AddScoped<ITestRunService, TestRunService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 2. CONFIGURATION DU PIPELINE HTTP (Middleware)
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +32,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Sécurité de base
+app.UseAuthorization();
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+// 3. MAPPING DES ROUTES
+// C'est cette ligne qui fait le lien entre l'URL /api/TestRun et ta classe TestRunController
+app.MapControllers(); 
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
