@@ -1,6 +1,6 @@
 namespace LoadSentinel.Models;
 
-public class Scenarios
+public class Scenario
 {
     public int Id { get; set; }
     public string Name { get; set; }

@@ -6,6 +6,6 @@ public class LoadSentinelDbContext : DbContext
 {
     public LoadSentinelDbContext(DbContextOptions<LoadSentinelDbContext> options) : base(options){ }
     
-    public DbSet<Scenarios> Scenarios { get; set; }
+    public DbSet<Scenario> Scenario { get; set; }
     public DbSet<TestRun> TestRuns { get; set; }
 }

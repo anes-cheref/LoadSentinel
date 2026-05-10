@@ -16,7 +16,7 @@ public class TestRunService : ITestRunService
     
     public async Task AddTestRunAsync(CreateTestRunDto createTestRunDto)
     {
-        var scenario = await _context.Scenarios.FindAsync(createTestRunDto.ScenarioId);
+        var scenario = await _context.Scenario.FindAsync(createTestRunDto.ScenarioId);
         if (scenario == null)
         {
             throw new KeyNotFoundException($"Le scénario avec l'ID {createTestRunDto.ScenarioId} n'existe pas.");

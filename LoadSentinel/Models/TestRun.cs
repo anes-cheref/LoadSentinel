@@ -12,5 +12,5 @@ public class TestRun
     public double AverageResponseTime { get; set; }
     public bool IsSuccess { get; set; }
     
-    public Scenarios? Scenario { get; set; }
+    public Scenario? Scenario { get; set; }
 }
