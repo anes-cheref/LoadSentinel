@@ -4,7 +4,8 @@ namespace LoadSentinel.Services;
 
 public interface IScenarioService
 {
-    public Task AddScenarioAsync(CreateScenarioDto createScenarioDto);
+    public Task<Scenario> AddScenarioAsync(CreateScenarioDto createScenarioDto);
     public Task<List<Scenario>> GetAllScenariosAsync();
-    
+
+    Task<Scenario> GetByIdAsync(int id);
 }

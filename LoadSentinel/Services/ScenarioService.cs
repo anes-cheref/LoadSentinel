@@ -13,7 +13,7 @@ public class ScenarioService : IScenarioService
     {
         _context = context;
     }
-    public async Task AddScenarioAsync(CreateScenarioDto createScenarioDto)
+    public async Task<Scenario> AddScenarioAsync(CreateScenarioDto createScenarioDto)
     {
         var scenario = new Scenario
         {
@@ -22,10 +22,16 @@ public class ScenarioService : IScenarioService
         };
         _context.Scenario.Add(scenario);
         await _context.SaveChangesAsync();
+        return scenario;
     }
 
     public async Task<List<Scenario>> GetAllScenariosAsync()
     {
         return await _context.Scenario.ToListAsync();
+    }
+
+    public async Task<Scenario> GetByIdAsync(int id)
+    {
+        return await _context.Scenario.FindAsync(id) ;
     }
 }

@@ -16,10 +16,22 @@ public class ScenarioController(IScenarioService scenarioService) : ControllerBa
         return Ok(scenarios);
     }
     
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetScenarioById(int id) 
+    {
+        var scenario = await scenarioService.GetByIdAsync(id);
+        return scenario == null ? NotFound() : Ok(scenario);
+    }
+    
     [HttpPost]
     public async Task<IActionResult> AddScenarioAsync(CreateScenarioDto createScenarioDto)
     {
-         await scenarioService.AddScenarioAsync(createScenarioDto);
-         return CreatedAtAction(nameof(GetAllScenariosAsync), null);
+        
+        var createdScenario = await scenarioService.AddScenarioAsync(createScenarioDto);
+    
+        return CreatedAtAction(
+            nameof(GetScenarioById), 
+            new { id = createdScenario.Id }, 
+            createdScenario);
     }
 }
